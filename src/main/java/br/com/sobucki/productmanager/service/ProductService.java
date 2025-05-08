@@ -12,7 +12,7 @@ public class ProductService {
   private List<Product> products = new ArrayList<>();
 
   public ProductService() {
-    // products.add(new Product(1L, "Tênis", "Tênis Nike", "199.90"));
+    products.add(new Product(1L, "Tênis", "Tênis Nike", "199.00"));
   }
 
   public List<Product> getAllProducts() {
