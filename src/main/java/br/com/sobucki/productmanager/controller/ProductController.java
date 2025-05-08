@@ -1,6 +1,8 @@
 package br.com.sobucki.productmanager.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.service.ProductService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/products")
@@ -25,8 +30,14 @@ public class ProductController {
   }
 
   @GetMapping("/{id}")
-  public Product getProductById(@PathVariable Long id) {
-    return productService.getProductById(id);
+  public ResponseEntity<?> getProductById(@PathVariable Long id) {
+    Product product = productService.getProductById(id);
+    if (product == null) {
+      Map<String, String> error = new HashMap<>();
+      error.put("error", "Product not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    return ResponseEntity.ok(product);
   }
 
   // @PostMapping("/products")

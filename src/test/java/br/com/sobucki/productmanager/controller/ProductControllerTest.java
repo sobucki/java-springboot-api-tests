@@ -35,7 +35,7 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should return a product by ID")
   void shouldReturnProductById() throws Exception {
-    // Arrange
+
     Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
     when(productService.getProductById(1L)).thenReturn(product);
 
@@ -62,4 +62,22 @@ public class ProductControllerTest {
     assertEquals(expected, actual);
 
   }
+
+  @Test
+  @DisplayName("Should return 404 when product not found")
+  void shouldReturn404WhenProductNotFound() throws Exception {
+
+    when(productService.getProductById(1L)).thenReturn(null);
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    MvcResult result = mockMvc.perform(get("/api/products/1"))
+        .andExpect(status().isNotFound())
+        .andReturn();
+    String actualJson = result.getResponse().getContentAsString();
+    JsonNode expected = mapper.readTree("{\"error\":\"Product not found\"}");
+    JsonNode actual = mapper.readTree(actualJson);
+    assertEquals(expected, actual);
+  }
+
 }
