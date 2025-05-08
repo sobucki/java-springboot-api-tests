@@ -1,5 +1,6 @@
 package br.com.sobucki.productmanager.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -11,6 +12,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.service.ProductService;
@@ -28,18 +33,33 @@ public class ProductControllerTest {
   private ProductService productService;
 
   @Test
-  @DisplayName("Deve retornar um produto quando buscar pelo ID")
+  @DisplayName("Should return a product by ID")
   void shouldReturnProductById() throws Exception {
     // Arrange
     Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
     when(productService.getProductById(1L)).thenReturn(product);
 
-    // Act & Assert
-    mockMvc.perform(get("/api/products/1"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("Tênis"))
-        .andExpect(jsonPath("$.price").value("199.90"));
+    ObjectMapper mapper = new ObjectMapper();
 
-    
+    String expectedJson = """
+        {
+          "id": 1,
+          "name": "Tênis",
+          "price": "199.90",
+          "description": "Tênis Nike"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(get("/api/products/1"))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    String actualJson = result.getResponse().getContentAsString();
+
+    JsonNode expected = mapper.readTree(expectedJson);
+    JsonNode actual = mapper.readTree(actualJson);
+
+    assertEquals(expected, actual);
+
   }
 }
