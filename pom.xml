@@ -70,13 +70,14 @@
 				<version>0.8.10</version>
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>verify</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -88,8 +89,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<forkCount>0</forkCount>
+					<forkCount>1</forkCount>
 					<reuseForks>true</reuseForks>
+					<argLine>${argLine}</argLine>
 				</configuration>
 			</plugin>
 
