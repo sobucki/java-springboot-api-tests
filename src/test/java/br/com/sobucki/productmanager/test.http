@@ -1,8 +1,11 @@
-get http://localhost:8080/api/products
+@baseUrl = http://localhost:8080/api
+//Lista todos os produtos
+get {{baseUrl}}/products
 
 ###
 
-post http://localhost:8080/api/products
+//Cria um novo produto
+post {{baseUrl}}/products
 Content-Type: application/json
 
 {
@@ -14,19 +17,21 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/api/products/1
+//Atualiza um produto existente
+PUT {{baseUrl}}/products/1
 Content-Type: application/json
 
 {
   "name": "Product 1",
-  "description": "Description of Product 1",
+  "description": "Other description of Product 1",
   "price": 10.0,
   "quantity": 100
 }
 
 ###
 
-PUT http://localhost:8080/api/products/2
+//Not found to update
+PUT {{baseUrl}}/products/244
 Content-Type: application/json
 
 {
@@ -35,3 +40,6 @@ Content-Type: application/json
   "price": 10.0,
   "quantity": 100
 }
+###
+// Deleta um produto existente (esperado: 200 OK ou 204 No Content)
+DELETE {{baseUrl}}/products/1

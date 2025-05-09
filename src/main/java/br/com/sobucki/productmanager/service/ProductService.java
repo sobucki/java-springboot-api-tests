@@ -10,9 +10,9 @@ import br.com.sobucki.productmanager.model.Product;
 @Service
 public class ProductService {
   private List<Product> products = new ArrayList<>();
+  private Long nextId = 1L;
 
   public ProductService() {
-    products.add(new Product(1L, "Tênis", "Tênis Nike", "199.00"));
   }
 
   public List<Product> getAllProducts() {
@@ -20,11 +20,14 @@ public class ProductService {
   }
 
   public Product getProductById(Long id) {
-    return products.stream().filter(
-        product -> product.getId().equals(id)).findFirst().orElse(null);
+    return products.stream()
+        .filter(product -> id.equals(product.getId()))
+        .findFirst()
+        .orElse(null);
   }
 
   public Product createProduct(Product product) {
+    product.setId(nextId++);
     products.add(product);
     return product;
   }
@@ -37,5 +40,9 @@ public class ProductService {
       existingProduct.setPrice(product.getPrice());
     }
     return existingProduct;
+  }
+
+  public void deleteProduct(Long id) {
+    products.removeIf(product -> product.getId().equals(id));
   }
 }
