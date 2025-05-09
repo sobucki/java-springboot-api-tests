@@ -23,4 +23,19 @@ public class ProductService {
     return products.stream().filter(
         product -> product.getId().equals(id)).findFirst().orElse(null);
   }
+
+  public Product createProduct(Product product) {
+    products.add(product);
+    return product;
+  }
+
+  public Product updateProduct(Long id, Product product) {
+    Product existingProduct = getProductById(id);
+    if (existingProduct != null) {
+      existingProduct.setName(product.getName());
+      existingProduct.setDescription(product.getDescription());
+      existingProduct.setPrice(product.getPrice());
+    }
+    return existingProduct;
+  }
 }

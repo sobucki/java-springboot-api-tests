@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,16 +43,21 @@ public class ProductController {
     return ResponseEntity.ok(product);
   }
 
-  // @PostMapping("/products")
-  // public Product createProduct(@RequestBody Product product) {
-  // return productService.createProduct(product);
-  // }
+  @PostMapping({ "", "/" })
+  public Product createProduct(@RequestBody Product product) {
+    return productService.createProduct(product);
+  }
 
-  // @PutMapping("/products/{id}")
-  // public Product updateProduct(@PathVariable Long id, @RequestBody Product
-  // product) {
-  // return productService.updateProduct(id, product);
-  // }
+  @PutMapping("/{id}")
+  public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    Product existingProduct = productService.getProductById(id);
+    if (existingProduct == null) {
+      Map<String, String> error = new HashMap<>();
+      error.put("error", "Product not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    return ResponseEntity.ok(productService.updateProduct(id, product));
+  }
 
   // @DeleteMapping("/products/{id}")
   // public void deleteProduct(@PathVariable Long id) {

@@ -1,0 +1,37 @@
+get http://localhost:8080/api/products
+
+###
+
+post http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}
+
+###
+
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}
+
+###
+
+PUT http://localhost:8080/api/products/2
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}
