@@ -229,15 +229,30 @@ public class ProductControllerTest {
     assertEquals(expected, actual);
   }
 
-  // @Test
-  // @DisplayName("Should remove a product")
-  // void shouldRemoveProduct() throws Exception {
-  // Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
-  // when(productService.getProductById(1L)).thenReturn(product);
+  @Test
+  @DisplayName("Should remove a product")
+  void shouldRemoveProduct() throws Exception {
+    Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    when(productService.getProductById(1L)).thenReturn(product);
 
-  // mockMvc.perform(delete("/api/products/1"))
-  // .andExpect(status().isOk());
+    mockMvc.perform(delete("/api/products/1"))
+        .andExpect(status().isNoContent());
 
-  // }
+  }
+
+  @Test
+  @DisplayName("Should return 404 when removing a non-existing product")
+  void shouldReturn404WhenRemovingNonExistingProduct() throws Exception {
+    when(productService.getProductById(1L)).thenReturn(null);
+
+    MvcResult result = mockMvc.perform(delete("/api/products/1"))
+        .andExpect(status().isNotFound())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper().readTree("{\"error\":\"Product not found\"}");
+    JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
 
 }

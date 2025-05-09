@@ -60,8 +60,16 @@ public class ProductController {
     return ResponseEntity.ok(productService.updateProduct(id, product));
   }
 
-  @DeleteMapping("/products/{id}")
-  public void deleteProduct(@PathVariable Long id) {
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+    Product existingProduct = productService.getProductById(id);
+    if (existingProduct == null) {
+      Map<String, String> error = new HashMap<>();
+      error.put("error", "Product not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     productService.deleteProduct(id);
+    return ResponseEntity.noContent().build();
   }
 }
