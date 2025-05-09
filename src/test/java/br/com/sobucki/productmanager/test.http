@@ -40,6 +40,12 @@ Content-Type: application/json
   "price": 10.0,
   "quantity": 100
 }
+
+
 ###
-// Deleta um produto existente (esperado: 200 OK ou 204 No Content)
+// Deleta um produto existente (esperado: 204 No Content)
 DELETE {{baseUrl}}/products/1
+
+###
+// Retorna um produto existente (esperado: 404 Not Found)
+DELETE {{baseUrl}}/products/5
