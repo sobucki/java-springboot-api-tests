@@ -41,4 +41,76 @@ public class ProductServiceTest {
     verify(repository).findAll();
   }
 
+  @Test
+  @DisplayName("Should return empty list when no products are found")
+  void shouldReturnEmptyListWhenNoProductsFound() {
+    when(repository.findAll()).thenReturn(List.of());
+    List<Product> products = productService.getAllProducts();
+
+    assertEquals(0, products.size());
+
+    verify(repository).findAll();
+  }
+
+  @Test
+  @DisplayName("Should return a product by ID")
+  void shouldReturnProductById() {
+    Product mockProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+
+    when(repository.findById(1L)).thenReturn(mockProduct);
+    Product product = productService.getProductById(1L);
+
+    assertEquals("Tênis", product.getName());
+    assertEquals("Tênis Nike", product.getDescription());
+    assertEquals("199.90", product.getPrice());
+    assertEquals(1L, product.getId());
+
+    verify(repository).findById(1L);
+  }
+
+  @Test
+  @DisplayName("Should return null when product not found by ID")
+  void shouldReturnNullWhenProductNotFoundById() {
+    when(repository.findById(1L)).thenReturn(null);
+    Product product = productService.getProductById(1L);
+
+    assertEquals(null, product);
+
+    verify(repository).findById(1L);
+  }
+
+  @Test
+  @DisplayName("Should create a new product")
+  void shouldCreateNewProduct() {
+    Product mockProduct = new Product(null, "Tênis", "Tênis Nike", "199.90");
+    Product savedProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+
+    when(repository.save(mockProduct)).thenReturn(savedProduct);
+    Product product = productService.createProduct(mockProduct);
+
+    assertEquals("Tênis", product.getName());
+    assertEquals("Tênis Nike", product.getDescription());
+    assertEquals("199.90", product.getPrice());
+    assertEquals(1L, product.getId());
+
+    verify(repository).save(mockProduct);
+  }
+
+  @Test
+  @DisplayName("Should update an existing product")
+  void shouldUpdateExistingProduct() {
+    Product mockProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product updatedProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+
+    when(repository.update(1L, mockProduct)).thenReturn(updatedProduct);
+    Product product = productService.updateProduct(1L, mockProduct);
+
+    assertEquals("Tênis", product.getName());
+    assertEquals("Tênis Nike", product.getDescription());
+    assertEquals("199.90", product.getPrice());
+    assertEquals(1L, product.getId());
+
+    verify(repository).update(1L, mockProduct);
+  }
+
 }
