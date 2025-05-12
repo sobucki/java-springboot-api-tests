@@ -27,24 +27,18 @@ public class ProductMemoryRepository implements ProductRepository {
 
   @Override
   public Product save(Product product) {
-    product.setId(nextId++);
-    products.add(product);
-    return product;
-  }
-
-  @Override
-  public Product update(Long id, Product product) {
-    Product existingProduct = findById(id);
-    if (existingProduct != null) {
-      existingProduct.setName(product.getName());
-      existingProduct.setDescription(product.getDescription());
-      existingProduct.setPrice(product.getPrice());
+    if (product.getId() == null) {
+      product.setId(nextId++);
+      products.add(product);
+    } else {
+      delete(product.getId());
+      products.add(product);
     }
-    return existingProduct;
+    return product;
   }
 
   @Override
   public void delete(Long id) {
     products.removeIf(product -> product.getId().equals(id));
   }
-} 
+}

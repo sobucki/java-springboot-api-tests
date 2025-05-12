@@ -10,7 +10,7 @@ import br.com.sobucki.productmanager.repository.ProductRepository;
 
 @Service
 public class ProductService {
-  
+
   private final ProductRepository productRepository;
 
   @Autowired
@@ -31,7 +31,16 @@ public class ProductService {
   }
 
   public Product updateProduct(Long id, Product product) {
-    return productRepository.update(id, product);
+    Product existingProduct = productRepository.findById(id);
+    if (existingProduct == null) {
+      return null;
+    }
+
+    existingProduct.setName(product.getName());
+    existingProduct.setDescription(product.getDescription());
+    existingProduct.setPrice(product.getPrice());
+
+    return productRepository.save(existingProduct);
   }
 
   public void deleteProduct(Long id) {

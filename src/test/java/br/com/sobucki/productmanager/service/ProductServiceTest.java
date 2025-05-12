@@ -99,18 +99,19 @@ public class ProductServiceTest {
   @Test
   @DisplayName("Should update an existing product")
   void shouldUpdateExistingProduct() {
-    Product mockProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
-    Product updatedProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product existisProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product updatedProduct = new Product(1L, "Tênis", "Tênis Adidas", "299.90");
 
-    when(repository.update(1L, mockProduct)).thenReturn(updatedProduct);
-    Product product = productService.updateProduct(1L, mockProduct);
+    when(repository.findById(1L)).thenReturn(existisProduct);
+    when(repository.save(existisProduct)).thenReturn(updatedProduct);
+    Product product = productService.updateProduct(1L, updatedProduct);
 
     assertEquals("Tênis", product.getName());
-    assertEquals("Tênis Nike", product.getDescription());
-    assertEquals("199.90", product.getPrice());
+    assertEquals("Tênis Adidas", product.getDescription());
+    assertEquals("299.90", product.getPrice());
     assertEquals(1L, product.getId());
 
-    verify(repository).update(1L, mockProduct);
+    verify(repository).save(existisProduct);
   }
 
 }
