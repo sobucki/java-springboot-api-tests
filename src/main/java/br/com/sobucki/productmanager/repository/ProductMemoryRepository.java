@@ -38,7 +38,7 @@ public class ProductMemoryRepository implements ProductRepository {
   }
 
   @Override
-  public void delete(Long id) {
-    products.removeIf(product -> product.getId().equals(id));
+  public boolean delete(Long id) {
+    return products.removeIf(product -> product.getId().equals(id));
   }
 }
