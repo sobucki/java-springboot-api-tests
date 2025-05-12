@@ -1,10 +1,24 @@
 package br.com.sobucki.productmanager.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "products")
 public class Product {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private String description;
   private String price;
+
+  public Product() {
+    // Construtor vazio necessário para JPA
+  }
 
   public Product(Long id, String name, String description, String price) {
     this.id = id;
