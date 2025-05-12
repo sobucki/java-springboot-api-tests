@@ -2,6 +2,8 @@ package br.com.sobucki.productmanager.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -112,6 +114,25 @@ public class ProductServiceTest {
     assertEquals(1L, product.getId());
 
     verify(repository).save(existisProduct);
+  }
+
+  @Test
+  @DisplayName("Should return null when updating a non-existing product")
+  void shouldReturnNullWhenUpdatingANonExistingProduct() {
+    when(repository.findById(2L)).thenReturn(null);
+    Product updatedProduct = new Product(2L, "Camiseta", "Camiseta de corrida", "99.90");
+    Product product = productService.updateProduct(2L, updatedProduct);
+
+    assertEquals(product, null);
+    verify(repository, times(0)).save(updatedProduct);
+  }
+
+  @Test
+  @DisplayName("Should delete a product by ID")
+  void shouldDeleteProductById() {
+    productService.deleteProduct(1L);
+
+    verify(repository).delete(1L);
   }
 
 }
