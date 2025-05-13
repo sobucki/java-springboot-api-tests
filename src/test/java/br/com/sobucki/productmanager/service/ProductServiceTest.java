@@ -1,11 +1,13 @@
 package br.com.sobucki.productmanager.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.argThat;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.repository.ProductRepository;
 
@@ -84,10 +87,10 @@ public class ProductServiceTest {
   @Test
   @DisplayName("Should create a new product")
   void shouldCreateNewProduct() {
-    Product mockProduct = new Product(null, "Tênis", "Tênis Nike", "199.90");
+    ProductDTO mockProduct = new ProductDTO(null, "Tênis", "Tênis Nike", "199.90");
     Product savedProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
 
-    when(repository.save(mockProduct)).thenReturn(savedProduct);
+    when(repository.save(any(Product.class))).thenReturn(savedProduct);
     Product product = productService.createProduct(mockProduct);
 
     assertEquals("Tênis", product.getName());
@@ -95,7 +98,11 @@ public class ProductServiceTest {
     assertEquals("199.90", product.getPrice());
     assertEquals(1L, product.getId());
 
-    verify(repository).save(mockProduct);
+    verify(repository).save(any(Product.class));
+
+    verify(repository).save(argThat(p -> "Tênis".equals(p.getName()) &&
+        "Tênis Nike".equals(p.getDescription()) &&
+        "199.90".equals(p.getPrice())));
   }
 
   @Test

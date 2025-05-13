@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.repository.ProductRepository;
 
@@ -26,7 +27,8 @@ public class ProductService {
     return productRepository.findById(id);
   }
 
-  public Product createProduct(Product product) {
+  public Product createProduct(ProductDTO dto) {
+    Product product = createProductFromDTO(dto);
     return productRepository.save(product);
   }
 
@@ -45,5 +47,14 @@ public class ProductService {
 
   public void deleteProduct(Long id) {
     productRepository.delete(id);
+  }
+
+  public Product createProductFromDTO(ProductDTO productDTO) {
+    Product product = new Product();
+    product.setName(productDTO.getName());
+    product.setDescription(productDTO.getDescription());
+    product.setPrice(productDTO.getPrice());
+    product.setId(productDTO.getId());
+    return product;
   }
 }

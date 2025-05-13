@@ -17,6 +17,18 @@ Content-Type: application/json
 
 ###
 
+//Erro ao criar um produto com nome vazio
+post {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "description": "Description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}
+
+###
+
 //Atualiza um produto existente
 PUT {{baseUrl}}/products/1
 Content-Type: application/json

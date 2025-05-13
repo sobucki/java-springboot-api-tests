@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.service.ProductService;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +47,9 @@ public class ProductController {
   }
 
   @PostMapping({ "", "/" })
-  public Product createProduct(@RequestBody Product product) {
-    return productService.createProduct(product);
+  public ResponseEntity<?> createProduct(@RequestBody @Valid ProductDTO productDTO) {
+    Product created = productService.createProduct(productDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @PutMapping("/{id}")

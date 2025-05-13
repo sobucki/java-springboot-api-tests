@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.service.ProductService;
 
@@ -130,7 +131,7 @@ public class ProductControllerTest {
   @DisplayName("Should add a new product")
   void shouldAddNewProduct() throws Exception {
     Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
-    when(productService.createProduct(any(Product.class))).thenReturn(product);
+    when(productService.createProduct(any(ProductDTO.class))).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -154,7 +155,7 @@ public class ProductControllerTest {
     MvcResult result = mockMvc.perform(post("/api/products")
         .contentType("application/json")
         .content(inputJson))
-        .andExpect(status().isOk()) // ou .isCreated() se você retornar 201
+        .andExpect(status().isCreated())
         .andReturn();
 
     JsonNode expected = mapper.readTree(expectedJson);
@@ -250,6 +251,29 @@ public class ProductControllerTest {
         .andReturn();
 
     JsonNode expected = new ObjectMapper().readTree("{\"error\":\"Product not found\"}");
+    JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @DisplayName("Should return 400 when product name is blank")
+  void shouldReturn400WhenProductNameIsBlank() throws Exception {
+    String inputJson = """
+        {
+          "name": "",
+          "description": "Tênis Nike",
+          "price": "199.90"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper().readTree("{\"name\":\"Name is mandatory\"}");
     JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
 
     assertEquals(expected, actual);
