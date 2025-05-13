@@ -3,6 +3,9 @@
 get {{baseUrl}}/products
 
 ###
+get {{baseUrl}}/products/2
+
+###
 
 //Cria um novo produto
 post {{baseUrl}}/products
