@@ -279,4 +279,147 @@ public class ProductControllerTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  @DisplayName("Should return 400 when product description is blank")
+  void shouldReturn400WhenProductDescriptionIsBlank() throws Exception {
+    String inputJson = """
+        {
+          "name": "Tênis",
+          "description": "",
+          "price": "199.90"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper().readTree("{\"description\":\"Description is mandatory\"}");
+    JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
+  // @Test
+  // @DisplayName("Should return 400 when product price is blank")
+  // void shouldReturn400WhenProductPriceIsBlank() throws Exception {
+  // String inputJson = """
+  // {
+  // "name": "Tênis",
+  // "description": "Tênis Nike",
+  // "price": ""
+  // }
+  // """;
+
+  // MvcResult result = mockMvc.perform(post("/api/products")
+  // .contentType("application/json")
+  // .content(inputJson))
+  // .andExpect(status().isBadRequest())
+  // .andReturn();
+
+  // JsonNode expected = new ObjectMapper().readTree("{\"price\":\"Price is not a
+  // number\"}");
+  // JsonNode actual = new
+  // ObjectMapper().readTree(result.getResponse().getContentAsString());
+
+  // assertEquals(expected, actual);
+  // }
+
+  @Test
+  @DisplayName("Should return 400 when product price is not provided")
+  void shouldReturn400WhenProductPriceIsNotProvided() throws Exception {
+    String inputJson = """
+        {
+          "name": "Tênis",
+          "description": "Tênis Nike"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper().readTree("{\"price\":\"Price is mandatory\"}");
+    JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @DisplayName("Should return 400 when price is not a number")
+  void shouldReturn400WhenPriceIsNotNumber() throws Exception {
+    String inputJson = """
+        {
+          "name": "Tênis",
+          "description": "Tênis Nike",
+          "price": "not-a-number"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper().readTree("{\"price\":\"Price must be a number\"}");
+    JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @DisplayName("Should return 400 when price has more than two decimals")
+  void shouldReturn400WhenPriceHasTooManyDecimalPlaces() throws Exception {
+    String inputJson = """
+        {
+          "name": "Tênis",
+          "description": "Tênis Nike",
+          "price": "199.999"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper()
+        .readTree("{\"price\":\"Price must be a number\"}");
+    JsonNode actual = new ObjectMapper()
+        .readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @DisplayName("Should return 400 when price is negative")
+  void shouldReturn400WhenPriceIsNegative() throws Exception {
+    String inputJson = """
+        {
+          "name": "Tênis",
+          "description": "Tênis Nike",
+          "price": "-10.00"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+    JsonNode expected = new ObjectMapper()
+        .readTree("{\"price\":\"Price must be a number\"}");
+    JsonNode actual = new ObjectMapper()
+        .readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
 }

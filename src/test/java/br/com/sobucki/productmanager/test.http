@@ -29,6 +29,19 @@ Content-Type: application/json
 
 ###
 
+//Erro ao criar um sem preço
+post {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "quantity": 100,
+  "price": ""
+}
+
+###
+
 //Atualiza um produto existente
 PUT {{baseUrl}}/products/1
 Content-Type: application/json

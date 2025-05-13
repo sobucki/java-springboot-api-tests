@@ -1,7 +1,7 @@
 package br.com.sobucki.productmanager.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class ProductDTO {
 
@@ -9,7 +9,12 @@ public class ProductDTO {
 
   @NotBlank(message = "Name is mandatory")
   private String name;
+
+  @NotBlank(message = "Description is mandatory")
   private String description;
+
+  @NotBlank(message = "Price is mandatory")
+  @Pattern(regexp = "^\\d+(\\.\\d{1,2})?$", message = "Price must be a number")
   private String price;
 
   public ProductDTO() {
