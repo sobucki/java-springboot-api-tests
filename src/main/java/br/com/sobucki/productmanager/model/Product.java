@@ -1,5 +1,7 @@
 package br.com.sobucki.productmanager.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,13 +16,13 @@ public class Product {
   private Long id;
   private String name;
   private String description;
-  private String price;
+  private BigDecimal price;
 
   public Product() {
     // Construtor vazio necessário para JPA
   }
 
-  public Product(Long id, String name, String description, String price) {
+  public Product(Long id, String name, String description, BigDecimal price) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -51,11 +53,11 @@ public class Product {
     this.description = description;
   }
 
-  public String getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(String price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 }

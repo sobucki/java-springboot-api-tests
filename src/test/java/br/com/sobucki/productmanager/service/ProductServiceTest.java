@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.argThat;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ public class ProductServiceTest {
   @Test
   @DisplayName("Should return all products")
   void shouldReturnAllProducts() {
-    List<Product> mockProducts = List.of(new Product(1L, "Tênis", "Tênis Nike", "199.90"));
+    List<Product> mockProducts = List.of(new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90")));
 
     when(repository.findAll()).thenReturn(mockProducts);
     List<Product> products = productService.getAllProducts();
@@ -40,7 +41,7 @@ public class ProductServiceTest {
     assertEquals(1, products.size());
     assertEquals("Tênis", products.get(0).getName());
     assertEquals("Tênis Nike", products.get(0).getDescription());
-    assertEquals("199.90", products.get(0).getPrice());
+    assertEquals(new BigDecimal("199.90"), products.get(0).getPrice());
     assertEquals(1L, products.get(0).getId());
 
     verify(repository).findAll();
@@ -60,14 +61,14 @@ public class ProductServiceTest {
   @Test
   @DisplayName("Should return a product by ID")
   void shouldReturnProductById() {
-    Product mockProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product mockProduct = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
 
     when(repository.findById(1L)).thenReturn(mockProduct);
     Product product = productService.getProductById(1L);
 
     assertEquals("Tênis", product.getName());
     assertEquals("Tênis Nike", product.getDescription());
-    assertEquals("199.90", product.getPrice());
+    assertEquals(new BigDecimal("199.90"), product.getPrice());
     assertEquals(1L, product.getId());
 
     verify(repository).findById(1L);
@@ -87,29 +88,30 @@ public class ProductServiceTest {
   @Test
   @DisplayName("Should create a new product")
   void shouldCreateNewProduct() {
-    ProductDTO mockProduct = new ProductDTO(null, "Tênis", "Tênis Nike", "199.90");
-    Product savedProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    ProductDTO mockProduct = new ProductDTO(null, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    Product savedProduct = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
 
     when(repository.save(any(Product.class))).thenReturn(savedProduct);
     Product product = productService.createProduct(mockProduct);
 
     assertEquals("Tênis", product.getName());
     assertEquals("Tênis Nike", product.getDescription());
-    assertEquals("199.90", product.getPrice());
+    assertEquals(new BigDecimal("199.90"), product.getPrice());
     assertEquals(1L, product.getId());
 
     verify(repository).save(any(Product.class));
+    BigDecimal expectedPrice = new BigDecimal("199.90");
 
     verify(repository).save(argThat(p -> "Tênis".equals(p.getName()) &&
         "Tênis Nike".equals(p.getDescription()) &&
-        "199.90".equals(p.getPrice())));
+        expectedPrice.equals(p.getPrice())));
   }
 
   @Test
   @DisplayName("Should update an existing product")
   void shouldUpdateExistingProduct() {
-    Product existisProduct = new Product(1L, "Tênis", "Tênis Nike", "199.90");
-    Product updatedProduct = new Product(1L, "Tênis", "Tênis Adidas", "299.90");
+    Product existisProduct = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    Product updatedProduct = new Product(1L, "Tênis", "Tênis Adidas", new BigDecimal("299.90"));
 
     when(repository.findById(1L)).thenReturn(existisProduct);
     when(repository.save(existisProduct)).thenReturn(updatedProduct);
@@ -117,7 +119,7 @@ public class ProductServiceTest {
 
     assertEquals("Tênis", product.getName());
     assertEquals("Tênis Adidas", product.getDescription());
-    assertEquals("299.90", product.getPrice());
+    assertEquals(new BigDecimal("299.90"), product.getPrice());
     assertEquals(1L, product.getId());
 
     verify(repository).save(existisProduct);
@@ -127,7 +129,7 @@ public class ProductServiceTest {
   @DisplayName("Should return null when updating a non-existing product")
   void shouldReturnNullWhenUpdatingANonExistingProduct() {
     when(repository.findById(2L)).thenReturn(null);
-    Product updatedProduct = new Product(2L, "Camiseta", "Camiseta de corrida", "99.90");
+    Product updatedProduct = new Product(2L, "Camiseta", "Camiseta de corrida", new BigDecimal("99.90"));
     Product product = productService.updateProduct(2L, updatedProduct);
 
     assertEquals(product, null);

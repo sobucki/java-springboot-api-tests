@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -34,7 +35,7 @@ class ProductPostgresRepositoryTest {
     @Test
     void shouldSaveProduct() {
         // given
-        Product product = new Product(null, "Produto Teste", "Descrição do Produto", "10.99");
+        Product product = new Product(null, "Produto Teste", "Descrição do Produto", new BigDecimal("10.99"));
 
         // when
         Product savedProduct = repository.save(product);
@@ -43,13 +44,13 @@ class ProductPostgresRepositoryTest {
         assertNotNull(savedProduct.getId());
         assertEquals("Produto Teste", savedProduct.getName());
         assertEquals("Descrição do Produto", savedProduct.getDescription());
-        assertEquals("10.99", savedProduct.getPrice());
+        assertEquals(new BigDecimal("10.99"), savedProduct.getPrice());
     }
 
     @Test
     void shouldFindProductById() {
         // given
-        Product product = new Product(null, "Produto Teste", "Descrição do Produto", "10.99");
+        Product product = new Product(null, "Produto Teste", "Descrição do Produto", new BigDecimal("10.99"));
         Product savedProduct = repository.save(product);
 
         // when
@@ -73,8 +74,8 @@ class ProductPostgresRepositoryTest {
     @Test
     void shouldFindAllProducts() {
         // given
-        Product product1 = new Product(null, "Produto 1", "Descrição 1", "10.99");
-        Product product2 = new Product(null, "Produto 2", "Descrição 2", "20.99");
+        Product product1 = new Product(null, "Produto 1", "Descrição 1", new BigDecimal("10.99"));
+        Product product2 = new Product(null, "Produto 2", "Descrição 2", new BigDecimal("20.99"));
         repository.save(product1);
         repository.save(product2);
 
@@ -88,7 +89,7 @@ class ProductPostgresRepositoryTest {
     @Test
     void shouldDeleteProduct() {
         // given
-        Product product = new Product(null, "Produto Teste", "Descrição do Produto", "10.99");
+        Product product = new Product(null, "Produto Teste", "Descrição do Produto", new BigDecimal("10.99"));
         Product savedProduct = repository.save(product);
 
         // when
@@ -107,4 +108,4 @@ class ProductPostgresRepositoryTest {
         // then
         assertFalse(result);
     }
-} 
+}

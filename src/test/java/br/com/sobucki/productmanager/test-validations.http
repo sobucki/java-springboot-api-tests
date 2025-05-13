@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:8080/api
+//Lista todos os produtos
+get {{baseUrl}}/products
+
+###
+
+
+
+###
+
+//Erro ao criar um produto com nome vazio
+post {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "description": "Description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}
+
+###
+
+//Erro ao criar um sem preço
+post {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "quantity": 100,
+  "price": "not_number"
+}

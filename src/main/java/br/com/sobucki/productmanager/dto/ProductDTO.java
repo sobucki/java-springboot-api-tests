@@ -1,7 +1,14 @@
 package br.com.sobucki.productmanager.dto;
 
+import java.math.BigDecimal;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import br.com.sobucki.productmanager.config.BigDecimalDeserializer;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductDTO {
 
@@ -13,15 +20,17 @@ public class ProductDTO {
   @NotBlank(message = "Description is mandatory")
   private String description;
 
-  @NotBlank(message = "Price is mandatory")
-  @Pattern(regexp = "^\\d+(\\.\\d{1,2})?$", message = "Price must be a number")
-  private String price;
+  @NotNull(message = "Price is mandatory")
+  @DecimalMin(value = "0.01", message = "Price must be at least 0.01")
+  @Digits(integer = 38, fraction = 2)
+  @JsonDeserialize(using = BigDecimalDeserializer.class)
+  private BigDecimal price;
 
   public ProductDTO() {
     // Construtor vazio necessário para JPA
   }
 
-  public ProductDTO(Long id, String name, String description, String price) {
+  public ProductDTO(Long id, String name, String description, BigDecimal price) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -52,11 +61,11 @@ public class ProductDTO {
     this.description = description;
   }
 
-  public String getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(String price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 

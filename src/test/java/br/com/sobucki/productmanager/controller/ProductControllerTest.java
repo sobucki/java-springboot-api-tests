@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,7 @@ public class ProductControllerTest {
   @DisplayName("Should return a product by ID")
   void shouldReturnProductById() throws Exception {
 
-    Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.getProductById(1L)).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
@@ -52,7 +53,7 @@ public class ProductControllerTest {
         {
           "id": 1,
           "name": "Tênis",
-          "price": "199.90",
+          "price": 199.90,
           "description": "Tênis Nike"
         }
         """;
@@ -91,8 +92,8 @@ public class ProductControllerTest {
   @DisplayName("Should list all products")
   void shouldListAllProducts() throws Exception {
 
-    Product product1 = new Product(1L, "Tênis", "Tênis Nike", "199.90");
-    Product product2 = new Product(2L, "Camisa", "Camisa Adidas", "99.90");
+    Product product1 = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    Product product2 = new Product(2L, "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
 
     when(productService.getAllProducts()).thenReturn(List.of(product1, product2));
 
@@ -103,13 +104,13 @@ public class ProductControllerTest {
           {
             "id": 1,
             "name": "Tênis",
-            "price": "199.90",
+            "price": 199.90,
             "description": "Tênis Nike"
           },
           {
             "id": 2,
             "name": "Camisa",
-            "price": "99.90",
+            "price": 99.90,
             "description": "Camisa Adidas"
           }
         ]
@@ -130,7 +131,7 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should add a new product")
   void shouldAddNewProduct() throws Exception {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.createProduct(any(ProductDTO.class))).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
@@ -148,7 +149,7 @@ public class ProductControllerTest {
           "id": 1,
           "name": "Tênis",
           "description": "Tênis Nike",
-          "price": "199.90"
+          "price": 199.90
         }
         """;
 
@@ -167,7 +168,7 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should update a product")
   void shouldUpdateProduct() throws Exception {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.getProductById(1L)).thenReturn(product);
     when(productService.updateProduct(any(Long.class), any(Product.class))).thenReturn(product);
 
@@ -186,7 +187,7 @@ public class ProductControllerTest {
           "id": 1,
           "name": "Tênis",
           "description": "Tênis Nike",
-          "price": "199.90"
+          "price": 199.90
         }
         """;
 
@@ -233,7 +234,7 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should remove a product")
   void shouldRemoveProduct() throws Exception {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", "199.90");
+    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.getProductById(1L)).thenReturn(product);
 
     mockMvc.perform(delete("/api/products/1"))
@@ -366,7 +367,8 @@ public class ProductControllerTest {
         .andExpect(status().isBadRequest())
         .andReturn();
 
-    JsonNode expected = new ObjectMapper().readTree("{\"price\":\"Price must be a number\"}");
+    JsonNode expected = new ObjectMapper()
+        .readTree("{\"error\":\"Invalid input: 'not-a-number'. Expected a valid number.\"}");
     JsonNode actual = new ObjectMapper().readTree(result.getResponse().getContentAsString());
 
     assertEquals(expected, actual);
@@ -390,7 +392,7 @@ public class ProductControllerTest {
         .andReturn();
 
     JsonNode expected = new ObjectMapper()
-        .readTree("{\"price\":\"Price must be a number\"}");
+        .readTree("{\"price\":\"numeric value out of bounds (<38 digits>.<2 digits> expected)\"}");
     JsonNode actual = new ObjectMapper()
         .readTree(result.getResponse().getContentAsString());
 
@@ -415,7 +417,7 @@ public class ProductControllerTest {
         .andReturn();
 
     JsonNode expected = new ObjectMapper()
-        .readTree("{\"price\":\"Price must be a number\"}");
+        .readTree("{\"price\":\"Price must be at least 0.01\"}");
     JsonNode actual = new ObjectMapper()
         .readTree(result.getResponse().getContentAsString());
 
