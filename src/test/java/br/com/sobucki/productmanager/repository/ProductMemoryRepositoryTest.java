@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,8 +35,8 @@ public class ProductMemoryRepositoryTest {
   @Test
   @DisplayName("Should return all products")
   void shouldReturnAllProducts() {
-    Product product1 = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    Product product2 = new Product(2L, "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
+    Product product1 = new Product(UUID.randomUUID(), "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    Product product2 = new Product(UUID.randomUUID(), "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
     repository.save(product1);
     repository.save(product2);
 
@@ -45,10 +46,11 @@ public class ProductMemoryRepositoryTest {
   @Test
   @DisplayName("Should return a product by ID")
   void shouldReturnProductById() {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     repository.save(product);
 
-    Product foundProduct = repository.findById(1L);
+    Product foundProduct = repository.findById(id);
 
     assertNotNull(foundProduct);
     assertEquals("Tênis", foundProduct.getName());
@@ -59,7 +61,7 @@ public class ProductMemoryRepositoryTest {
   @Test
   @DisplayName("Should return null when product not found by ID")
   void shouldReturnNullWhenProductNotFoundById() {
-    Product foundProduct = repository.findById(1L);
+    Product foundProduct = repository.findById(UUID.randomUUID());
 
     assertEquals(null, foundProduct);
   }
@@ -67,10 +69,11 @@ public class ProductMemoryRepositoryTest {
   @Test
   @DisplayName("Should delete a product by ID")
   void shouldDeleteProductById() {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     repository.save(product);
 
-    boolean result = repository.delete(1L);
+    boolean result = repository.delete(id);
 
     assertEquals(result, true);
     assertEquals(0, repository.findAll().size());
@@ -79,10 +82,11 @@ public class ProductMemoryRepositoryTest {
   @Test
   @DisplayName("Should return false when deleting a non-existing product")
   void shouldReturnFalseWhenDeletingNonExistingProduct() {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     repository.save(product);
 
-    boolean result = repository.delete(2L);
+    boolean result = repository.delete(UUID.randomUUID());
 
     assertEquals(result, false);
     assertEquals(1, repository.findAll().size());

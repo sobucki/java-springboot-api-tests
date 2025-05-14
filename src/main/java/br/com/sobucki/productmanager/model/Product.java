@@ -1,7 +1,9 @@
 package br.com.sobucki.productmanager.model;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,8 +14,9 @@ import jakarta.persistence.Table;
 @Table(name = "products")
 public class Product {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(name = "id", updatable = false, nullable = false)
+  private UUID id;
   private String name;
   private String description;
   private BigDecimal price;
@@ -22,18 +25,18 @@ public class Product {
     // Construtor vazio necessário para JPA
   }
 
-  public Product(Long id, String name, String description, BigDecimal price) {
+  public Product(UUID id, String name, String description, BigDecimal price) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.price = price;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

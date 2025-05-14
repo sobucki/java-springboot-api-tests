@@ -2,11 +2,13 @@ package br.com.sobucki.productmanager.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,22 +45,23 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should return a product by ID")
   void shouldReturnProductById() throws Exception {
-
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    when(productService.getProductById(1L)).thenReturn(product);
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    when(productService.getProductById(id)).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
 
     String expectedJson = """
         {
-          "id": 1,
-          "name": "Tênis",
-          "price": 199.90,
-          "description": "Tênis Nike"
+          "id": "%s",
+        "name": "Tênis",
+              "price": 199.90,
+              "description": "Tênis Nike"
         }
-        """;
+        """.formatted(
+        id);
 
-    MvcResult result = mockMvc.perform(get("/api/products/1"))
+    MvcResult result = mockMvc.perform(get("/api/products/" + id))
         .andExpect(status().isOk())
         .andReturn();
 
@@ -75,11 +78,12 @@ public class ProductControllerTest {
   @DisplayName("Should return 404 when product not found")
   void shouldReturn404WhenProductNotFound() throws Exception {
 
-    when(productService.getProductById(1L)).thenReturn(null);
+    UUID id = UUID.randomUUID();
+    when(productService.getProductById(id)).thenReturn(null);
 
     ObjectMapper mapper = new ObjectMapper();
 
-    MvcResult result = mockMvc.perform(get("/api/products/1"))
+    MvcResult result = mockMvc.perform(get("/api/products/" + id))
         .andExpect(status().isNotFound())
         .andReturn();
     String actualJson = result.getResponse().getContentAsString();
@@ -91,9 +95,10 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should list all products")
   void shouldListAllProducts() throws Exception {
-
-    Product product1 = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    Product product2 = new Product(2L, "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
+    UUID id1 = UUID.randomUUID();
+    UUID id2 = UUID.randomUUID();
+    Product product1 = new Product(id1, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    Product product2 = new Product(id2, "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
 
     when(productService.getAllProducts()).thenReturn(List.of(product1, product2));
 
@@ -102,19 +107,19 @@ public class ProductControllerTest {
     String expectedJson = """
         [
           {
-            "id": 1,
+            "id": "%s",
             "name": "Tênis",
             "price": 199.90,
             "description": "Tênis Nike"
           },
           {
-            "id": 2,
+            "id": "%s",
             "name": "Camisa",
             "price": 99.90,
             "description": "Camisa Adidas"
           }
         ]
-        """;
+        """.formatted(id1, id2);
 
     MvcResult result = mockMvc.perform(get("/api/products"))
         .andExpect(status().isOk())
@@ -131,7 +136,8 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should add a new product")
   void shouldAddNewProduct() throws Exception {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.createProduct(any(ProductDTO.class))).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
@@ -146,12 +152,12 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
-          "id": 1,
+          "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
           "price": 199.90
         }
-        """;
+        """.formatted(id);
 
     MvcResult result = mockMvc.perform(post("/api/products")
         .contentType("application/json")
@@ -168,9 +174,10 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should update a product")
   void shouldUpdateProduct() throws Exception {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    when(productService.getProductById(1L)).thenReturn(product);
-    when(productService.updateProduct(any(Long.class), any(Product.class))).thenReturn(product);
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    when(productService.getProductById(id)).thenReturn(product);
+    when(productService.updateProduct(any(UUID.class), any(Product.class))).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -184,14 +191,14 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
-          "id": 1,
+          "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
           "price": 199.90
         }
-        """;
+        """.formatted(id);
 
-    MvcResult result = mockMvc.perform(put("/api/products/1")
+    MvcResult result = mockMvc.perform(put("/api/products/" + id)
         .contentType("application/json")
         .content(inputJson))
         .andExpect(status().isOk())
@@ -206,8 +213,9 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should return 404 when updating a non-existing product")
   void shouldReturn404WhenUpdatingNonExistingProduct() throws Exception {
-    when(productService.getProductById(1L)).thenReturn(null);
-    when(productService.updateProduct(any(Long.class), any(Product.class))).thenReturn(null);
+    UUID id = UUID.randomUUID();
+    when(productService.getProductById(id)).thenReturn(null);
+    when(productService.updateProduct(any(UUID.class), any(Product.class))).thenReturn(null);
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -219,7 +227,7 @@ public class ProductControllerTest {
         }
         """;
 
-    MvcResult result = mockMvc.perform(put("/api/products/1")
+    MvcResult result = mockMvc.perform(put("/api/products/" + id)
         .contentType("application/json")
         .content(inputJson))
         .andExpect(status().isNotFound())
@@ -234,10 +242,11 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should remove a product")
   void shouldRemoveProduct() throws Exception {
-    Product product = new Product(1L, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    when(productService.getProductById(1L)).thenReturn(product);
+    UUID id = UUID.randomUUID();
+    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    when(productService.getProductById(id)).thenReturn(product);
 
-    mockMvc.perform(delete("/api/products/1"))
+    mockMvc.perform(delete("/api/products/" + id))
         .andExpect(status().isNoContent());
 
   }
@@ -245,9 +254,10 @@ public class ProductControllerTest {
   @Test
   @DisplayName("Should return 404 when removing a non-existing product")
   void shouldReturn404WhenRemovingNonExistingProduct() throws Exception {
-    when(productService.getProductById(1L)).thenReturn(null);
+    UUID id = UUID.randomUUID();
+    when(productService.getProductById(id)).thenReturn(null);
 
-    MvcResult result = mockMvc.perform(delete("/api/products/1"))
+    MvcResult result = mockMvc.perform(delete("/api/products/" + id))
         .andExpect(status().isNotFound())
         .andReturn();
 

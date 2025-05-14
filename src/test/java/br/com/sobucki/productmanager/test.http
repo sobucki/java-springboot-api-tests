@@ -3,6 +3,9 @@
 get {{baseUrl}}/products
 
 ###
+get {{baseUrl}}/products/1795089d-bbea-459d-8184-eb5f5d0dd013
+
+###
 
 //Cria um novo produto
 post {{baseUrl}}/products
@@ -15,35 +18,13 @@ Content-Type: application/json
   "quantity": 100
 }
 
-###
 
-//Erro ao criar um produto com nome vazio
-post {{baseUrl}}/products
-Content-Type: application/json
 
-{
-  "description": "Description of Product 1",
-  "price": 10.0,
-  "quantity": 100
-}
-
-###
-
-//Erro ao criar um sem preço
-post {{baseUrl}}/products
-Content-Type: application/json
-
-{
-  "name": "Product 1",
-  "description": "Description of Product 1",
-  "quantity": 100,
-  "price": ""
-}
 
 ###
 
 //Atualiza um produto existente
-PUT {{baseUrl}}/products/1
+PUT {{baseUrl}}/products/1795089d-bbea-459d-8184-eb5f5d0dd013
 Content-Type: application/json
 
 {
@@ -53,23 +34,12 @@ Content-Type: application/json
   "quantity": 100
 }
 
-###
 
-//Not found to update
-PUT {{baseUrl}}/products/244
-Content-Type: application/json
-
-{
-  "name": "Product 1",
-  "description": "Description of Product 1",
-  "price": 10.0,
-  "quantity": 100
-}
 
 
 ###
 // Deleta um produto existente (esperado: 204 No Content)
-DELETE {{baseUrl}}/products/1
+DELETE {{baseUrl}}/products/1795089d-bbea-459d-8184-eb5f5d0dd013
 
 ###
 // Retorna um produto existente (esperado: 404 Not Found)

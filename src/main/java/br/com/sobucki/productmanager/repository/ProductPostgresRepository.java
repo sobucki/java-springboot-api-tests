@@ -1,6 +1,7 @@
 package br.com.sobucki.productmanager.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,7 @@ public class ProductPostgresRepository implements ProductRepository {
     }
 
     @Override
-    public Product findById(Long id) {
+    public Product findById(UUID id) {
         return jpaRepository.findById(id).orElse(null);
     }
 
@@ -33,11 +34,11 @@ public class ProductPostgresRepository implements ProductRepository {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(UUID id) {
         if (jpaRepository.existsById(id)) {
             jpaRepository.deleteById(id);
             return true;
         }
         return false;
     }
-} 
+}

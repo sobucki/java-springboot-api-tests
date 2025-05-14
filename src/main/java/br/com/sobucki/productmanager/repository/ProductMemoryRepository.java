@@ -2,6 +2,7 @@ package br.com.sobucki.productmanager.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,6 @@ import br.com.sobucki.productmanager.model.Product;
 @Repository
 public class ProductMemoryRepository implements ProductRepository {
   private List<Product> products = new ArrayList<>();
-  private Long nextId = 1L;
 
   @Override
   public List<Product> findAll() {
@@ -18,7 +18,7 @@ public class ProductMemoryRepository implements ProductRepository {
   }
 
   @Override
-  public Product findById(Long id) {
+  public Product findById(UUID id) {
     return products.stream()
         .filter(product -> id.equals(product.getId()))
         .findFirst()
@@ -28,7 +28,7 @@ public class ProductMemoryRepository implements ProductRepository {
   @Override
   public Product save(Product product) {
     if (product.getId() == null) {
-      product.setId(nextId++);
+      product.setId(UUID.randomUUID());
       products.add(product);
     } else {
       delete(product.getId());
@@ -38,7 +38,7 @@ public class ProductMemoryRepository implements ProductRepository {
   }
 
   @Override
-  public boolean delete(Long id) {
+  public boolean delete(UUID id) {
     return products.removeIf(product -> product.getId().equals(id));
   }
 }

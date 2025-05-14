@@ -30,3 +30,17 @@ Content-Type: application/json
   "quantity": 100,
   "price": "not_number"
 }
+
+
+###
+
+//Not found to update
+PUT {{baseUrl}}/products/244
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}

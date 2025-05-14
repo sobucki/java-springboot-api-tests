@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ class ProductPostgresRepositoryTest {
     @Test
     void shouldReturnNullWhenProductNotFound() {
         // when
-        Product foundProduct = repository.findById(999L);
+        Product foundProduct = repository.findById(UUID.randomUUID());
 
         // then
         assertNull(foundProduct);
@@ -103,7 +104,7 @@ class ProductPostgresRepositoryTest {
     @Test
     void shouldReturnFalseWhenDeletingNonExistentProduct() {
         // when
-        boolean result = repository.delete(999L);
+        boolean result = repository.delete(UUID.randomUUID());
 
         // then
         assertFalse(result);

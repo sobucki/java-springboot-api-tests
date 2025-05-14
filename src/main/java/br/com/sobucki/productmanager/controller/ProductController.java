@@ -3,6 +3,7 @@ package br.com.sobucki.productmanager.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class ProductController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getProductById(@PathVariable Long id) {
+  public ResponseEntity<?> getProductById(@PathVariable UUID id) {
     Product product = productService.getProductById(id);
     if (product == null) {
       Map<String, String> error = new HashMap<>();
@@ -53,7 +54,7 @@ public class ProductController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+  public ResponseEntity<?> updateProduct(@PathVariable UUID id, @RequestBody Product product) {
     Product existingProduct = productService.getProductById(id);
     if (existingProduct == null) {
       Map<String, String> error = new HashMap<>();
@@ -64,7 +65,7 @@ public class ProductController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+  public ResponseEntity<?> deleteProduct(@PathVariable UUID id) {
     Product existingProduct = productService.getProductById(id);
     if (existingProduct == null) {
       Map<String, String> error = new HashMap<>();

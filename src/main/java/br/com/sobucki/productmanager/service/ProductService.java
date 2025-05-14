@@ -1,6 +1,7 @@
 package br.com.sobucki.productmanager.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ProductService {
     return productRepository.findAll();
   }
 
-  public Product getProductById(Long id) {
+  public Product getProductById(UUID id) {
     return productRepository.findById(id);
   }
 
@@ -32,7 +33,7 @@ public class ProductService {
     return productRepository.save(product);
   }
 
-  public Product updateProduct(Long id, Product product) {
+  public Product updateProduct(UUID id, Product product) {
     Product existingProduct = productRepository.findById(id);
     if (existingProduct == null) {
       return null;
@@ -45,7 +46,7 @@ public class ProductService {
     return productRepository.save(existingProduct);
   }
 
-  public void deleteProduct(Long id) {
+  public void deleteProduct(UUID id) {
     productRepository.delete(id);
   }
 

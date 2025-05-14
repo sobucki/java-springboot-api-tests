@@ -1,6 +1,7 @@
 package br.com.sobucki.productmanager.dto;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -12,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class ProductDTO {
 
-  private Long id;
+  private UUID id;
 
   @NotBlank(message = "Name is mandatory")
   private String name;
@@ -30,18 +31,18 @@ public class ProductDTO {
     // Construtor vazio necessário para JPA
   }
 
-  public ProductDTO(Long id, String name, String description, BigDecimal price) {
+  public ProductDTO(UUID id, String name, String description, BigDecimal price) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.price = price;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
