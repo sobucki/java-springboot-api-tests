@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import br.com.sobucki.productmanager.model.Product;
+import br.com.sobucki.productmanager.repository.product.ProductMemoryRepository;
 
 public class ProductMemoryRepositoryTest {
   private ProductMemoryRepository repository;

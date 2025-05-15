@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
-import br.com.sobucki.productmanager.repository.ProductRepository;
+import br.com.sobucki.productmanager.repository.product.ProductRepository;
 
 public class ProductServiceTest {
   private ProductRepository repository;

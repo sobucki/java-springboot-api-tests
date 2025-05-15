@@ -1,4 +1,4 @@
-package br.com.sobucki.productmanager.repository;
+package br.com.sobucki.productmanager.repository.product;
 
 import java.util.List;
 import java.util.UUID;

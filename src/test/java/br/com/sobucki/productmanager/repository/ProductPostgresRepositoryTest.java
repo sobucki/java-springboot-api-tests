@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.sobucki.productmanager.model.Product;
+import br.com.sobucki.productmanager.repository.product.ProductJpaRepository;
+import br.com.sobucki.productmanager.repository.product.ProductPostgresRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")

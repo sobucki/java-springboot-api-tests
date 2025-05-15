@@ -1,4 +1,4 @@
-package br.com.sobucki.productmanager.repository;
+package br.com.sobucki.productmanager.repository.product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class ProductMemoryRepository implements ProductRepository {
   public boolean delete(UUID id) {
     return products.removeIf(product -> product.getId().equals(id));
   }
-  
+
   @Override
   public List<Product> saveAll(List<Product> products) {
     List<Product> savedProducts = new ArrayList<>();
@@ -50,7 +50,7 @@ public class ProductMemoryRepository implements ProductRepository {
     }
     return savedProducts;
   }
-  
+
   @Override
   public void deleteAll() {
     products.clear();

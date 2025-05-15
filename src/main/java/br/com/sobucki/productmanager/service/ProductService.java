@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
-import br.com.sobucki.productmanager.repository.ProductRepository;
+import br.com.sobucki.productmanager.repository.product.ProductRepository;
 
 @Service
 public class ProductService {
