@@ -38,7 +38,7 @@ public class ProductServiceTest {
     List<Product> mockProducts = List.of(new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90")));
 
     when(repository.findAll()).thenReturn(mockProducts);
-    List<Product> products = productService.getAllProducts();
+    List<ProductDTO> products = productService.getAllProducts();
 
     assertEquals(1, products.size());
     assertEquals("Tênis", products.get(0).getName());
@@ -53,7 +53,7 @@ public class ProductServiceTest {
   @DisplayName("Should return empty list when no products are found")
   void shouldReturnEmptyListWhenNoProductsFound() {
     when(repository.findAll()).thenReturn(List.of());
-    List<Product> products = productService.getAllProducts();
+    List<ProductDTO> products = productService.getAllProducts();
 
     assertEquals(0, products.size());
 

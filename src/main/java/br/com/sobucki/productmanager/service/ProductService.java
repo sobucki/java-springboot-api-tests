@@ -20,8 +20,10 @@ public class ProductService {
     this.productRepository = productRepository;
   }
 
-  public List<Product> getAllProducts() {
-    return productRepository.findAll();
+  public List<ProductDTO> getAllProducts() {
+    List<Product> allProducts = productRepository.findAll();
+    List<ProductDTO> allProductsDTO = allProducts.stream().map(product -> createProductDTO(product)).toList();
+    return allProductsDTO;
   }
 
   public Product getProductById(UUID id) {
@@ -57,5 +59,14 @@ public class ProductService {
     product.setPrice(productDTO.getPrice());
     product.setId(productDTO.getId());
     return product;
+  }
+
+  public ProductDTO createProductDTO(Product product) {
+    ProductDTO productDTO = new ProductDTO();
+    productDTO.setName(product.getName());
+    productDTO.setDescription(product.getDescription());
+    productDTO.setPrice(product.getPrice());
+    productDTO.setId(product.getId());
+    return productDTO;
   }
 }

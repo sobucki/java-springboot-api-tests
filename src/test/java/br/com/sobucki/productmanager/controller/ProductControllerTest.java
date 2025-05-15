@@ -96,8 +96,8 @@ public class ProductControllerTest {
   void shouldListAllProducts() throws Exception {
     UUID id1 = UUID.randomUUID();
     UUID id2 = UUID.randomUUID();
-    Product product1 = new Product(id1, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    Product product2 = new Product(id2, "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
+    ProductDTO product1 = new ProductDTO(id1, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    ProductDTO product2 = new ProductDTO(id2, "Camisa", "Camisa Adidas", new BigDecimal("99.90"));
 
     when(productService.getAllProducts()).thenReturn(List.of(product1, product2));
 
@@ -106,20 +106,12 @@ public class ProductControllerTest {
     String expectedJson = """
         [
           {
-            "createdDate":null,
-            "lastUpdatedDate":null,
-            "createdBy":null,
-            "updatedBy":null,
             "id": "%s",
             "name": "Tênis",
             "price": 199.90,
             "description": "Tênis Nike"
           },
           {
-            "createdDate":null,
-            "lastUpdatedDate":null,
-            "createdBy":null,
-            "updatedBy":null,
             "id": "%s",
             "name": "Camisa",
             "price": 99.90,
