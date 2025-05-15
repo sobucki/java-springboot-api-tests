@@ -2,37 +2,32 @@ package br.com.sobucki.productmanager.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import br.com.sobucki.productmanager.ProductManagerApplication;
 import br.com.sobucki.productmanager.dto.ProductDTO;
 import br.com.sobucki.productmanager.model.Product;
 import br.com.sobucki.productmanager.service.ProductService;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductController.class)
+@SpringBootTest(classes = ProductManagerApplication.class)
+@AutoConfigureMockMvc
 @DisplayName("Testes do Controlador de Produtos")
 public class ProductControllerTest {
 
@@ -53,6 +48,10 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
+          "createdDate":null,
+          "lastUpdatedDate":null,
+          "createdBy":null,
+          "updatedBy":null,
           "id": "%s",
         "name": "Tênis",
               "price": 199.90,
@@ -107,12 +106,20 @@ public class ProductControllerTest {
     String expectedJson = """
         [
           {
+            "createdDate":null,
+            "lastUpdatedDate":null,
+            "createdBy":null,
+            "updatedBy":null,
             "id": "%s",
             "name": "Tênis",
             "price": 199.90,
             "description": "Tênis Nike"
           },
           {
+            "createdDate":null,
+            "lastUpdatedDate":null,
+            "createdBy":null,
+            "updatedBy":null,
             "id": "%s",
             "name": "Camisa",
             "price": 99.90,
@@ -152,6 +159,10 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
+          "createdDate":null,
+          "lastUpdatedDate":null,
+          "createdBy":null,
+          "updatedBy":null,
           "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
@@ -191,6 +202,10 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
+          "createdDate":null,
+          "lastUpdatedDate":null,
+          "createdBy":null,
+          "updatedBy":null,
           "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
