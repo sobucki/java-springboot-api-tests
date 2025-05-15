@@ -7,11 +7,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import br.com.sobucki.productmanager.model.Category;
-import br.com.sobucki.productmanager.repository.base.BaseRepository;
 
 @Repository
 @Primary
-public class CategoryPostgresRepository implements BaseRepository<Category, UUID> {
+public class CategoryPostgresRepository implements CategoryRepository {
 
   private final CategoryJpaRepository jpaRepository;
 
