@@ -41,4 +41,18 @@ public class ProductMemoryRepository implements ProductRepository {
   public boolean delete(UUID id) {
     return products.removeIf(product -> product.getId().equals(id));
   }
+  
+  @Override
+  public List<Product> saveAll(List<Product> products) {
+    List<Product> savedProducts = new ArrayList<>();
+    for (Product product : products) {
+      savedProducts.add(save(product));
+    }
+    return savedProducts;
+  }
+  
+  @Override
+  public void deleteAll() {
+    products.clear();
+  }
 }

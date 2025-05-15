@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:8080/api/test-data
+
+### Verificar status do serviço de dados de teste
+GET {{baseUrl}}/status
+
+### Gerar 10 produtos realistas (padrão)
+POST {{baseUrl}}/products/10
+
+### Gerar 5 produtos aleatórios (não realistas)
+POST {{baseUrl}}/products/random/5
+
+### Gerar 5 produtos com preço entre 100 e 200
+POST {{baseUrl}}/products/price-range/5?minPrice=-100.00&maxPrice=1300.00
+
+### Remover todos os produtos
+DELETE {{baseUrl}}/products
+
+
+
+
+
+###
+
+//Atualiza um produto existente
+PUT {{baseUrl}}/products/1795089d-bbea-459d-8184-eb5f5d0dd013
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Other description of Product 1",
+  "price": 10.0,
+  "quantity": 100
+}
+
+
+
+
+###
+// Deleta um produto existente (esperado: 204 No Content)
+DELETE {{baseUrl}}/products/1795089d-bbea-459d-8184-eb5f5d0dd013
+
+###
+// Retorna um produto existente (esperado: 404 Not Found)
+DELETE {{baseUrl}}/products/5

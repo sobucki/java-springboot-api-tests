@@ -41,4 +41,14 @@ public class ProductPostgresRepository implements ProductRepository {
         }
         return false;
     }
+
+    @Override
+    public List<Product> saveAll(List<Product> products) {
+        return jpaRepository.saveAll(products);
+    }
+
+    @Override
+    public void deleteAll() {
+        jpaRepository.deleteAll();
+    }
 }

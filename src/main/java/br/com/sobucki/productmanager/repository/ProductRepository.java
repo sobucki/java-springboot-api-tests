@@ -13,4 +13,8 @@ public interface ProductRepository {
   Product save(Product product);
 
   boolean delete(UUID id);
+  
+  List<Product> saveAll(List<Product> products);
+  
+  void deleteAll();
 }
