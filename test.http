@@ -1,0 +1,87 @@
+### Variáveis
+@baseUrl = http://localhost:8080/api
+
+### =================== CATEGORIAS ===================
+
+### Listar todas as categorias
+GET {{baseUrl}}/categories
+Accept: application/json
+
+### Criar categoria "Eletrônicos"
+# Execute esta requisição primeiro
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Eletrônicos",
+  "description": "Produtos eletrônicos em geral"
+}
+
+### Criar categoria "Informática"
+# Execute esta requisição depois
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Informática",
+  "description": "Produtos de informática"
+}
+
+### =================== DICA ===================
+# Após criar as categorias, copie os IDs retornados nas respostas
+# e substitua nas variáveis abaixo. Exemplo:
+# @categoriaEletronicosId = 123e4567-e89b-12d3-a456-426614174000
+
+### Variáveis para IDs (substitua pelos IDs reais)
+@categoriaEletronicosId = 
+@categoriaInformaticaId = 
+@produtoId = 
+
+### =================== PRODUTOS ===================
+
+### Criar produto associado a categorias
+# Certifique-se de preencher os IDs das categorias acima antes de executar
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Notebook",
+  "description": "Notebook i7 16GB RAM",
+  "price": 3999.99,
+  "categoryIds": ["{{categoriaEletronicosId}}", "{{categoriaInformaticaId}}"]
+}
+
+### Listar todos os produtos
+GET {{baseUrl}}/products
+Accept: application/json
+
+### Obter produto específico
+# Preencha @produtoId com o ID do produto criado
+GET {{baseUrl}}/products/{{produtoId}}
+Accept: application/json
+
+### Atualizar produto removendo a categoria de Informática
+# Manterá apenas a categoria de Eletrônicos
+PUT {{baseUrl}}/products/{{produtoId}}
+Content-Type: application/json
+
+{
+  "name": "Notebook",
+  "description": "Notebook i7 16GB RAM SSD 512GB",
+  "price": 4299.99,
+  "categoryIds": ["{{categoriaEletronicosId}}"]
+}
+
+### Atualizar produto para adicionar de volta a categoria de Informática
+PUT {{baseUrl}}/products/{{produtoId}}
+Content-Type: application/json
+
+{
+  "name": "Notebook",
+  "description": "Notebook i7 16GB RAM SSD 512GB",
+  "price": 4299.99,
+  "categoryIds": ["{{categoriaEletronicosId}}", "{{categoriaInformaticaId}}"]
+}
+
+### Deletar produto
+DELETE {{baseUrl}}/products/{{produtoId}} 

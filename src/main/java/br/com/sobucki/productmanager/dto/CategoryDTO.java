@@ -2,9 +2,15 @@ package br.com.sobucki.productmanager.dto;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CategoryDTO {
   private UUID id;
+  
+  @NotBlank(message = "Name is mandatory")
   private String name;
+  
+  @NotBlank(message = "Description is mandatory")
   private String description;
 
   public CategoryDTO() {

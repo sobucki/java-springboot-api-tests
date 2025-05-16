@@ -44,24 +44,25 @@ public class ProductController {
       error.put("error", "Product not found");
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
-    return ResponseEntity.ok(product);
+    return ResponseEntity.ok(productService.createProductDTO(product));
   }
 
   @PostMapping({ "", "/" })
   public ResponseEntity<?> createProduct(@RequestBody @Valid ProductDTO productDTO) {
     Product created = productService.createProduct(productDTO);
-    return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProductDTO(created));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateProduct(@PathVariable UUID id, @RequestBody Product product) {
+  public ResponseEntity<?> updateProduct(@PathVariable UUID id, @RequestBody @Valid ProductDTO productDTO) {
     Product existingProduct = productService.getProductById(id);
     if (existingProduct == null) {
       Map<String, String> error = new HashMap<>();
       error.put("error", "Product not found");
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
-    return ResponseEntity.ok(productService.updateProduct(id, product));
+    Product updated = productService.updateProduct(id, productDTO);
+    return ResponseEntity.ok(productService.createProductDTO(updated));
   }
 
   @DeleteMapping("/{id}")

@@ -1,6 +1,8 @@
 package br.com.sobucki.productmanager.dto;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -26,6 +28,8 @@ public class ProductDTO {
   @Digits(integer = 38, fraction = 2)
   @JsonDeserialize(using = BigDecimalDeserializer.class)
   private BigDecimal price;
+  
+  private Set<UUID> categoryIds = new HashSet<>();
 
   public ProductDTO() {
     // Construtor vazio necessário para JPA
@@ -69,5 +73,12 @@ public class ProductDTO {
   public void setPrice(BigDecimal price) {
     this.price = price;
   }
-
+  
+  public Set<UUID> getCategoryIds() {
+    return categoryIds;
+  }
+  
+  public void setCategoryIds(Set<UUID> categoryIds) {
+    this.categoryIds = categoryIds;
+  }
 }
