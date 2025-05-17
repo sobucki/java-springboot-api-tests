@@ -42,21 +42,17 @@ public class ProductControllerTest {
   @DisplayName("Should return a product by ID")
   void shouldReturnProductById() throws Exception {
     UUID id = UUID.randomUUID();
-    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    var product = new ProductDTO(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.getProductById(id)).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
 
     String expectedJson = """
         {
-          "createdDate":null,
-          "lastUpdatedDate":null,
-          "createdBy":null,
-          "updatedBy":null,
           "id": "%s",
-        "name": "Tênis",
-              "price": 199.90,
-              "description": "Tênis Nike"
+          "name": "Tênis",
+          "price": 199.90,
+          "description": "Tênis Nike"
         }
         """.formatted(
         id);
@@ -137,7 +133,7 @@ public class ProductControllerTest {
   @DisplayName("Should add a new product")
   void shouldAddNewProduct() throws Exception {
     UUID id = UUID.randomUUID();
-    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    ProductDTO product = new ProductDTO(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.createProduct(any(ProductDTO.class))).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
@@ -152,10 +148,6 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
-          "createdDate":null,
-          "lastUpdatedDate":null,
-          "createdBy":null,
-          "updatedBy":null,
           "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
@@ -179,9 +171,10 @@ public class ProductControllerTest {
   @DisplayName("Should update a product")
   void shouldUpdateProduct() throws Exception {
     UUID id = UUID.randomUUID();
-    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    when(productService.getProductById(id)).thenReturn(product);
-    when(productService.updateProduct(any(UUID.class), any(Product.class))).thenReturn(product);
+    ProductDTO product = new ProductDTO(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    ProductDTO existsProduct = new ProductDTO(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    when(productService.getProductById(id)).thenReturn(existsProduct);
+    when(productService.updateProduct(any(UUID.class), any(ProductDTO.class))).thenReturn(product);
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -195,10 +188,6 @@ public class ProductControllerTest {
 
     String expectedJson = """
         {
-          "createdDate":null,
-          "lastUpdatedDate":null,
-          "createdBy":null,
-          "updatedBy":null,
           "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
@@ -223,7 +212,7 @@ public class ProductControllerTest {
   void shouldReturn404WhenUpdatingNonExistingProduct() throws Exception {
     UUID id = UUID.randomUUID();
     when(productService.getProductById(id)).thenReturn(null);
-    when(productService.updateProduct(any(UUID.class), any(Product.class))).thenReturn(null);
+    when(productService.updateProduct(any(UUID.class), any(ProductDTO.class))).thenReturn(null);
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -251,7 +240,7 @@ public class ProductControllerTest {
   @DisplayName("Should remove a product")
   void shouldRemoveProduct() throws Exception {
     UUID id = UUID.randomUUID();
-    Product product = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    ProductDTO product = new ProductDTO(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
     when(productService.getProductById(id)).thenReturn(product);
 
     mockMvc.perform(delete("/api/products/" + id))

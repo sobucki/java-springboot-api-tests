@@ -26,16 +26,22 @@ public class ProductService {
     return allProductsDTO;
   }
 
-  public Product getProductById(UUID id) {
-    return productRepository.findById(id);
+  public ProductDTO getProductById(UUID id) {
+    Product product = productRepository.findById(id);
+    if (product == null) {
+      return null;
+    }
+
+    return createProductDTO(product);
   }
 
-  public Product createProduct(ProductDTO dto) {
+  public ProductDTO createProduct(ProductDTO dto) {
     Product product = createProductFromDTO(dto);
-    return productRepository.save(product);
+    Product savedProduct = productRepository.save(product);
+    return createProductDTO(savedProduct);
   }
 
-  public Product updateProduct(UUID id, Product product) {
+  public ProductDTO updateProduct(UUID id, ProductDTO product) {
     Product existingProduct = productRepository.findById(id);
     if (existingProduct == null) {
       return null;
@@ -44,8 +50,9 @@ public class ProductService {
     existingProduct.setName(product.getName());
     existingProduct.setDescription(product.getDescription());
     existingProduct.setPrice(product.getPrice());
+    var savedProduct = productRepository.save(existingProduct);
 
-    return productRepository.save(existingProduct);
+    return createProductDTO(savedProduct);
   }
 
   public void deleteProduct(UUID id) {

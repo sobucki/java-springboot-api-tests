@@ -67,7 +67,7 @@ public class ProductServiceTest {
     Product mockProduct = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
 
     when(repository.findById(id)).thenReturn(mockProduct);
-    Product product = productService.getProductById(id);
+    var product = productService.getProductById(id);
 
     assertEquals("Tênis", product.getName());
     assertEquals("Tênis Nike", product.getDescription());
@@ -83,7 +83,7 @@ public class ProductServiceTest {
     UUID id = UUID.randomUUID();
 
     when(repository.findById(id)).thenReturn(null);
-    Product product = productService.getProductById(id);
+    var product = productService.getProductById(id);
 
     assertEquals(null, product);
 
@@ -98,7 +98,7 @@ public class ProductServiceTest {
     Product savedProduct = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
 
     when(repository.save(any(Product.class))).thenReturn(savedProduct);
-    Product product = productService.createProduct(mockProduct);
+    var product = productService.createProduct(mockProduct);
 
     assertEquals("Tênis", product.getName());
     assertEquals("Tênis Nike", product.getDescription());
@@ -118,12 +118,13 @@ public class ProductServiceTest {
   void shouldUpdateExistingProduct() {
     UUID id = UUID.randomUUID();
 
-    Product existisProduct = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
-    Product updatedProduct = new Product(id, "Tênis", "Tênis Adidas", new BigDecimal("299.90"));
+    var existisProduct = new Product(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"));
+    var updatedProduct = new Product(id, "Tênis", "Tênis Adidas", new BigDecimal("299.90"));
+    var updatedProductDTO = new ProductDTO(id, "Tênis", "Tênis Adidas", new BigDecimal("299.90"));
 
     when(repository.findById(id)).thenReturn(existisProduct);
     when(repository.save(existisProduct)).thenReturn(updatedProduct);
-    Product product = productService.updateProduct(id, updatedProduct);
+    var product = productService.updateProduct(id, updatedProductDTO);
 
     assertEquals("Tênis", product.getName());
     assertEquals("Tênis Adidas", product.getDescription());
@@ -138,11 +139,11 @@ public class ProductServiceTest {
   void shouldReturnNullWhenUpdatingANonExistingProduct() {
     UUID id = UUID.randomUUID();
     when(repository.findById(id)).thenReturn(null);
-    Product updatedProduct = new Product(id, "Camiseta", "Camiseta de corrida", new BigDecimal("99.90"));
-    Product product = productService.updateProduct(id, updatedProduct);
+    ProductDTO updatedProduct = new ProductDTO(id, "Camiseta", "Camiseta de corrida", new BigDecimal("99.90"));
+    var product = productService.updateProduct(id, updatedProduct);
 
     assertEquals(product, null);
-    verify(repository, times(0)).save(updatedProduct);
+    verify(repository, times(0)).save(any(Product.class));
   }
 
   @Test

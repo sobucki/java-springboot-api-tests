@@ -38,7 +38,7 @@ public class ProductController {
 
   @GetMapping("/{id}")
   public ResponseEntity<?> getProductById(@PathVariable UUID id) {
-    Product product = productService.getProductById(id);
+    ProductDTO product = productService.getProductById(id);
     if (product == null) {
       Map<String, String> error = new HashMap<>();
       error.put("error", "Product not found");
@@ -49,13 +49,13 @@ public class ProductController {
 
   @PostMapping({ "", "/" })
   public ResponseEntity<?> createProduct(@RequestBody @Valid ProductDTO productDTO) {
-    Product created = productService.createProduct(productDTO);
+    ProductDTO created = productService.createProduct(productDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateProduct(@PathVariable UUID id, @RequestBody Product product) {
-    Product existingProduct = productService.getProductById(id);
+  public ResponseEntity<?> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO product) {
+    ProductDTO existingProduct = productService.getProductById(id);
     if (existingProduct == null) {
       Map<String, String> error = new HashMap<>();
       error.put("error", "Product not found");
@@ -66,7 +66,7 @@ public class ProductController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteProduct(@PathVariable UUID id) {
-    Product existingProduct = productService.getProductById(id);
+    ProductDTO existingProduct = productService.getProductById(id);
     if (existingProduct == null) {
       Map<String, String> error = new HashMap<>();
       error.put("error", "Product not found");
