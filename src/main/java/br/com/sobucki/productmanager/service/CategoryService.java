@@ -31,14 +31,14 @@ public class CategoryService {
     return createCategoryDTO(savedCategory);
   }
 
-  public CategoryDTO updateCategory(UUID id, Category product) {
+  public CategoryDTO updateCategory(UUID id, CategoryDTO categoryDTO) {
     Category existingCategory = repository.findById(id);
     if (existingCategory == null) {
       return null;
     }
 
-    existingCategory.setName(product.getName());
-    existingCategory.setDescription(product.getDescription());
+    existingCategory.setName(categoryDTO.getName());
+    existingCategory.setDescription(categoryDTO.getDescription());
 
     repository.save(existingCategory);
 

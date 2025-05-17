@@ -57,10 +57,11 @@ public class CategoryServiceTest {
 
     Category foundCategory = new Category(id, "Vestuário", "Roupa e Acessórios");
     Category updated = new Category(id, "Vestuário", "Moda");
+    CategoryDTO updatedDTO = new CategoryDTO(id, "Vestuário", "Moda");
 
     when(repository.findById(id)).thenReturn(foundCategory);
     when(repository.save(foundCategory)).thenReturn(updated);
-    CategoryDTO result = categoryService.updateCategory(id, updated);
+    CategoryDTO result = categoryService.updateCategory(id, updatedDTO);
 
     assertEquals("Vestuário", result.getName());
     assertEquals("Moda", result.getDescription());
@@ -114,7 +115,7 @@ public class CategoryServiceTest {
   @DisplayName("Should return null when updating a non-existing category")
   public void shouldReturnNullWhenUpdatingNonExistingCategory() {
     UUID id = UUID.randomUUID();
-    Category updatedCategory = new Category(id, "Vestuário", "Roupa e Acessórios");
+    CategoryDTO updatedCategory = new CategoryDTO(id, "Vestuário", "Roupa e Acessórios");
 
     when(repository.findById(id)).thenReturn(null);
     CategoryDTO result = categoryService.updateCategory(id, updatedCategory);

@@ -1,16 +1,24 @@
 #!/bin/bash
 
-echo "Iniciando modo de hot reload para testes (método alternativo)..."
+# Verifica se foi fornecido um argumento
+if [ "$#" -eq 0 ]; then
+  echo "Iniciando modo de hot reload para todos os testes..."
+  TEST_PARAM=""
+else
+  echo "Iniciando modo de hot reload para a classe de teste: $1"
+  TEST_PARAM="-Dtest=$1"
+fi
+
 echo "Os testes serão executados automaticamente quando houver alterações nos arquivos."
 echo "Pressione Ctrl+C para sair."
 
 # Executa testes inicialmente
-./mvnw test
+./mvnw test $TEST_PARAM
 
 # Função para executar os testes
 run_tests() {
   echo -e "\n\n====== Executando testes... ======"
-  ./mvnw test
+  ./mvnw test $TEST_PARAM
 }
 
 # Loop principal para monitorar alterações
