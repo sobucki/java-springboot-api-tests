@@ -139,6 +139,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/TestDataController.*</exclude>
+						<exclude>**/TestDataService.*</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 
 			<plugin>

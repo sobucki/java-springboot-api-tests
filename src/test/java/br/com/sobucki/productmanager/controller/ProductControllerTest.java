@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,8 @@ public class ProductControllerTest {
           "id": "%s",
           "name": "Tênis",
           "price": 199.90,
-          "description": "Tênis Nike"
+          "description": "Tênis Nike",
+           "categoryIds": []
         }
         """.formatted(
         id);
@@ -106,13 +108,15 @@ public class ProductControllerTest {
             "id": "%s",
             "name": "Tênis",
             "price": 199.90,
-            "description": "Tênis Nike"
+            "description": "Tênis Nike",
+             "categoryIds": []
           },
           {
             "id": "%s",
             "name": "Camisa",
             "price": 99.90,
-            "description": "Camisa Adidas"
+            "description": "Camisa Adidas",
+             "categoryIds": []
           }
         ]
         """.formatted(id1, id2);
@@ -151,9 +155,55 @@ public class ProductControllerTest {
           "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
-          "price": 199.90
+          "price": 199.90,
+           "categoryIds": []
         }
         """.formatted(id);
+
+    MvcResult result = mockMvc.perform(post("/api/products")
+        .contentType("application/json")
+        .content(inputJson))
+        .andExpect(status().isCreated())
+        .andReturn();
+
+    JsonNode expected = mapper.readTree(expectedJson);
+    JsonNode actual = mapper.readTree(result.getResponse().getContentAsString());
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @DisplayName("Should create a new product with categories")
+  void shouldCreateNewProductWithCategories() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    var categoryId1 = UUID.randomUUID();
+    var categoryId2 = UUID.randomUUID();
+    ProductDTO product = new ProductDTO(id, "Tênis", "Tênis Nike", new BigDecimal("199.90"),
+        Set.of(categoryId1, categoryId2));
+    when(productService.getProductById(id)).thenReturn(product);
+    when(productService.createProduct(any(ProductDTO.class))).thenReturn(product);
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    String inputJson = """
+        {
+          "name": "Tênis",
+          "description": "Tênis Nike",
+          "price": "199.90",
+          "categoryIds": ["%s", "%s"]
+        }
+        """.formatted(categoryId1, categoryId2);
+
+    String expectedJson = """
+        {
+          "id": "%s",
+          "name": "Tênis",
+          "description": "Tênis Nike",
+          "price": 199.90,
+          "categoryIds": ["%s", "%s"]
+        }
+        """.formatted(id, categoryId1, categoryId2);
 
     MvcResult result = mockMvc.perform(post("/api/products")
         .contentType("application/json")
@@ -191,7 +241,8 @@ public class ProductControllerTest {
           "id": "%s",
           "name": "Tênis",
           "description": "Tênis Nike",
-          "price": 199.90
+          "price": 199.90,
+          "categoryIds": []
         }
         """.formatted(id);
 
