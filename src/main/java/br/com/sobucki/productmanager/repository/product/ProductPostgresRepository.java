@@ -1,16 +1,17 @@
 package br.com.sobucki.productmanager.repository.product;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.sobucki.productmanager.model.Product;
+import br.com.sobucki.productmanager.repository.base.BaseRepositoryImpl;
 
 @Repository
 @Primary
-public class ProductPostgresRepository implements ProductRepository {
+public class ProductPostgresRepository extends BaseRepositoryImpl<Product, UUID> implements ProductRepository {
 
     private final ProductJpaRepository jpaRepository;
 
@@ -19,36 +20,8 @@ public class ProductPostgresRepository implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAll() {
-        return jpaRepository.findAll();
+    protected JpaRepository<Product, UUID> getRepository() {
+        return jpaRepository;
     }
 
-    @Override
-    public Product findById(UUID id) {
-        return jpaRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public Product save(Product product) {
-        return jpaRepository.save(product);
-    }
-
-    @Override
-    public boolean delete(UUID id) {
-        if (jpaRepository.existsById(id)) {
-            jpaRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public List<Product> saveAll(List<Product> products) {
-        return jpaRepository.saveAll(products);
-    }
-
-    @Override
-    public void deleteAll() {
-        jpaRepository.deleteAll();
-    }
 }

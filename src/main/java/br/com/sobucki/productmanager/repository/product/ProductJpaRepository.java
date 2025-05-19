@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.sobucki.productmanager.model.Product;
 
-@Repository
+// @Repository
 public interface ProductJpaRepository extends JpaRepository<Product, UUID> {
     // Métodos personalizados podem ser adicionados aqui
 }

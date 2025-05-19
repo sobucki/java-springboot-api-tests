@@ -1,20 +1,10 @@
 package br.com.sobucki.productmanager.repository.product;
 
-import java.util.List;
 import java.util.UUID;
 
 import br.com.sobucki.productmanager.model.Product;
+import br.com.sobucki.productmanager.repository.base.BaseRepository;
 
-public interface ProductRepository {
-  List<Product> findAll();
+public interface ProductRepository extends BaseRepository<Product, UUID> {
 
-  Product findById(UUID id);
-
-  Product save(Product product);
-
-  boolean delete(UUID id);
-
-  List<Product> saveAll(List<Product> products);
-
-  void deleteAll();
 }
